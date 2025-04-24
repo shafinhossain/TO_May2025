@@ -2,12 +2,6 @@
   "ProjectName": "FMD_QNC_Open",
   "Shuttle": "MPW 0.13µm May 2025(T588)",
   "Technology": "SG13G2",
-  "Priority": "1",
-  "LBE": "no",
-  "SolderBalls": "no",
-  "CuPillar": "no",
-  "TSV": "no",
-  "RDL": "no",
   "Design": {
     "DesignName": "ExampleDesign",
     "FinalGdsName": "FMD_QNC_ExampleDesign.gds",
