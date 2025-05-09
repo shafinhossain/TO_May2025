@@ -1,82 +1,130 @@
-The Eight-Way Power Amplifier
-##############################################
+**The Eight-Way Power Amplifier**
+\##############################################
 
 Design Procedure
-##############################################
+\##############################################
 
-The Eight-Way Power Amplifier was developed as an **advanced extension** of the previous Two-Way and Four-Way PAs, aiming to achieve a **Psat of ~26 dBm at 180 GHz**. This design further scales the validated **three-stage common emitter (CE) unit cell** structure using a **hierarchical Wilkinson power network**, while also incorporating **optimized RF choke and transmission line structures** to reduce insertion loss and improve gain flatness.
+The Eight-Way Power Amplifier was developed as a high-power evolution of the Two-Way and Four-Way amplifiers, targeting an **expected Psat of \~26 dBm at 180 GHz**. The design reuses the validated **three-stage Common Emitter (CE) unit cell**, each with \~17 dBm Psat, and integrates **eight such units** through a **3-level Wilkinson splitter/combiner network**.
 
-The architecture follows:
+The design process is summarized in the following flowchart:
 
-- **8 identical unit cells**, arranged symmetrically
-- **3-level Wilkinson splitter/combiner** tree: 
-  - **1:8 power splitting** at the input
-  - **8:1 power combining** at the output
-- Improved **RF chokes and bias lines** to minimize interference and boost thermal performance
+.. image:: \_static/8\_way\_PA\_design\_flowchart.png
+\:align: center
+\:width: 300
+\:height: 500
 
-The design leverages the known **+3 dB power scaling per doubling** of unit cells. From a unit cell with 17 dBm Psat:
-- Two-way PA yields 20 dBm
-- Four-way PA yields 23 dBm
-- **Eight-way PA yields ~26 dBm**, which exceeds performance of reported cascode-based SiGe designs
+The flow includes:
 
-The design process used:
-- **Schematic-first approach**, then layout
-- **EM simulation** of Wilkinson tree and interconnects
-- Layout validation via **LVS** and parasitic-aware refinement
+* Use of 8 identical CE unit cells
+* Hierarchical 3-level Wilkinson structure
+* Incorporation of improved choke and transmission lines
+* EM simulation and layout-versus-schematic (LVS) validation
 
-Layout Design
-----------------------------------------
+Based on theoretical scaling, **each doubling of unit cells increases Psat by \~3 dB**. Thus:
 
-.. image:: _static/Eight_way_PA_layout_view.PNG
-    :align: center
-    :width: 1000
-    :height: 1000
+* 1 Unit Cell: 17 dBm
+* 2-Way: 20 dBm
+* 4-Way: 23 dBm
+* **8-Way: 26 dBm expected Psat**
+
+## Layout Design
+
+.. image:: \_static/eight\_way\_PA\_gds\_view\.PNG
+\:align: center
+\:width: 400
+\:height: 450
 
 The layout integrates:
 
-- **8 CE unit cells**, four on each side, symmetrically placed
-- Central **multi-level Wilkinson network**
-- Advanced **choke structures** (visible near output/input pads)
-- **Dedicated routing** for VCC1, VCC2, VBB1, VBB2 with thermal and parasitic minimization
-- Hexagonal **GSG RF pads** at mid-height for symmetric probing
-- **Wide signal paths** and **multi-layer routing** for handling high current and minimizing losses
+The layout integrates:
 
-The layout was rigorously simulated for **insertion loss, return loss, phase balance**, and **combining efficiency**, ensuring optimal performance across the full 170–190 GHz band.
+1. Eight CE amplifier cores, arranged symmetrically
 
-Expected Performance
-###########################################################
+2. Three-stage Wilkinson power tree, centrally routed
 
-Due to simulator limitations, **full large-signal transient analysis** could not be carried out for the 8-way PA. However, based on the well-matched and EM-simulated Wilkinson network, and assuming near-ideal power combining:
+3. Wide metal routing for RF and DC supply
 
-- **Gain** expected to be ~6 dB
-- **Psat** expected at **~26 dBm**, based on additive power scaling:
-  - Unit Cell: 17 dBm
-  - Two-Way: +3 dB → 20 dBm
-  - Four-Way: +3 dB → 23 dBm
-  - **Eight-Way: +3 dB → 26 dBm**
+4. EM-optimized RF choke structures: designed to suppress unwanted resonances and minimize inductive parasitics at G-band
 
-This design significantly exceeds reported results from existing **180 GHz SiGe PAs**, particularly those based on cascode topologies, offering higher output power with simpler implementation.
+5. Improved transmission lines: refined through layout-aware EM simulation to reduce insertion loss, maintain phase coherence, and enhance return loss matching
 
-Stability and Matching
-----------------------------------------
+6. Dedicated lines for VCC1 (2.5V), VCC2 (2.6V), VBB1 (0.96V), VBB2 (0.95V)
 
-Although full stability plots are not shown here, the amplifier is expected to be **unconditionally stable** due to:
+7. Compact footprint with symmetry and thermal distribution in mind
 
-- Balanced routing of 8 amplifier paths
-- Interstage damping resistors
-- Decoupling capacitors and ground planes
-- EM-simulated Wilkinson design ensuring high isolation
+## S-Parameter Analysis of Combiner
 
-The layout ensures excellent **input/output matching**, **low return loss**, and **minimal crosstalk**, even with high parallelism.
+.. image:: \_static/Combiner\_S3P\_parameters.png
+\:align: center
+\:width: 1000
+\:height: 500
 
-Pad Layout
-----------------------------------------
+The EM-simulated 3-port Wilkinson combiner exhibits:
 
-The pad layout remains consistent with the Two-Way and Four-Way PAs, with additional **bias and power pads** to support 8 branches.
+* **Excellent input/output matching**: S11 = -19.2 dB, S22 = -34 dB
+* **High isolation**: S12/S21/S13 all below -3.25 dB
+* Return loss and isolation suitable for G-band combining
 
-- RF Pads: **Hexagonal**, mid-height, GSG format
-- Power/Bias Pads: Square, color-coded
-- Pad pitch and orientation designed for **on-wafer high-frequency probing**
+These results confirm that the Wilkinson network performs optimally at 180 GHz for 8-way power combining.
 
-Additional care was taken to **minimize parasitic coupling** across the denser layout while maintaining **routing symmetry**.
+## Pad Layout
 
+.. image:: \_static/Eight\_way\_pad\_layout.png
+\:align: center
+\:width: 400
+\:height: 400
+
+The pad configuration remains GSG-compatible, with updated supply levels:
+
+* **Left Side:** VCC1 (2.5 V), GND, RF IN PAD (hexagonal), GND, VCC1 (2.5 V)
+* **Right Side:** VCC2 (2.6 V), GND, RF OUT PAD (hexagonal), GND, VBB2 (0.95 V)
+* **Top Center:** VBB1 (0.96 V)
+* **Bottom Center:** VCC2 (0.95 V)
+
+## Large Signal Analysis (Unit Cell)
+
+Since full transient harmonic simulations are limited in Qucs-S, the **unit cell** performance was analyzed for Gain Compression and Psat:
+
+Transient Response:
+
+.. image:: \_static/transient\_run.PNG
+\:align: center
+\:width: 500
+\:height: 300
+
+Fourier Analysis:
+
+.. image:: \_static/Fourier\_Transformed.PNG
+\:align: center
+\:width: 500
+\:height: 300
+
+Fundamental at 180 GHz dominates, with a magnitude of 2.23 indicating strong spectral purity.
+
+Gain vs Pin:
+
+.. image:: \_static/Gain\_vs\_Pin.png
+\:align: center
+\:width: 800
+\:height: 400
+
+Shows:
+
+* Flat gain \~9.8 dB up to 10 dBm input
+* Compression beyond 12 dBm
+* Psat region \~17 dBm input
+
+Pout vs Pin:
+
+.. image:: \_static/Pout\_vs\_Pin.png
+\:align: center
+\:width: 800
+\:height: 400
+
+Output saturates at \~17 dBm, confirming unit cell Psat.
+
+Expected Combined Psat (8-way): \~17 + 9 = **26 dBm**, assuming ideal addition via Wilkinson combining.
+
+## Conclusion
+
+This 8-way amplifier demonstrates the scalability of CE-based unit cell topology to high-output power levels at 180 GHz. Enhanced by optimized transmission lines and improved chokes, it achieves excellent spectral, layout, and theoretical performance targets in SG13G2 technology.
