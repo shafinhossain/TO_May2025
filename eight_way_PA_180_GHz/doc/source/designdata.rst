@@ -20,6 +20,44 @@ The flow includes:
 * Incorporation of improved choke and transmission lines
 * EM simulation and layout-versus-schematic (LVS) validation
 
+Eight-Way Power Amplifier
+##############################################
+
+Design Overview
+----------------------------------------
+
+The Eight-Way Power Amplifier was developed to achieve a **target Psat of 26 dBm at 180 GHz**, building on the CE-based unit cell validated in previous tapeouts. The amplifier scales eight such unit cells using a **three-level Wilkinson splitter-combiner network**, along with **EM-optimized chokes and transmission lines** for high-frequency performance and thermal reliability.
+
+.. image:: _static/8_way_pa_block_diagram.png
+    :align: center
+    :width: 800
+    :height: 900
+
+*Figure: Hierarchical block diagram showing 3-level Wilkinson network and 8 amplifier chains with ideal combining loss model.*
+
+---
+
+Unit Cell Schematic
+----------------------------------------
+
+Each amplifier core consists of a **three-stage single-ended Common Emitter (CE) chain**. The input stages are powered using **VCC = 2.5 V** and the final stage at **VCC = 2.6 V**, with appropriate **base bias voltages (VBB)** at 0.96 V and 0.95 V respectively.
+
+The schematic below represents one unit cell used in the 8-way amplifier, showing the topology of the CE chain and the biasing architecture:
+
+.. image:: _static/unit_cell_schematic.png
+    :align: center
+    :width: 900
+    :height: 400
+
+*Figure: Schematic of the three-stage CE amplifier used as a unit cell. NX denotes the number of emitter fingers per transistor.*
+
+The unit cell is carefully designed for:
+- **High Psat performance (~17 dBm)**
+- **Individual bias tuning per stage**
+- **Proper decoupling at each power rail**
+- Inter-stage matching using MIM capacitors and transmission lines
+
+
 Based on theoretical scaling, **each doubling of unit cells increases Psat by \~3 dB**. Thus:
 
 * 1 Unit Cell: 17 dBm
