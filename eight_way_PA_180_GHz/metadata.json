@@ -6,8 +6,8 @@
     "DesignName": "Eight Way PA with State of the Art Psat at 180 GHz",
     "FinalGdsName": "FMD_QNC_10_8way_PA_180G.gds",
     "TopCellName": "FMD_QNC_10_8way_PA_180G",
-    "Width": "2.185mm",
-    "Height": "2.4mm",
+    "Width": "2.190mm",
+    "Height": "2.405mm",
     "NumberOfSamples": "10"
   },
   "FinalWaferThickness": "200um"
